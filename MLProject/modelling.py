@@ -52,8 +52,10 @@ def main():
     # Parse ngram_range
     ngram = tuple(int(x) for x in args.ngram_range.split(','))
 
-    # Init DagsHub
+# Init DagsHub
     print("Menginisialisasi DagsHub...")
+    import os
+    os.environ['DAGSHUB_USER_TOKEN'] = os.getenv('DAGSHUB_TOKEN', '')
     dagshub.init(repo_owner=DAGSHUB_OWNER, repo_name=DAGSHUB_REPO, mlflow=True)
     mlflow.set_experiment(EXPERIMENT_NAME)
 
