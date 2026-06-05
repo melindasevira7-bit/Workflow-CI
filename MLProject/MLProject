@@ -1,0 +1,33 @@
+name: Klasifikasi_Sentimen_SmSA
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      dataset_path:
+        type: str
+        default: "smsa_preprocessing/smsa_preprocessed.csv"
+      max_features:
+        type: int
+        default: 5000
+      ngram_range:
+        type: str
+        default: "1,2"
+      C:
+        type: float
+        default: 1.0
+      test_size:
+        type: float
+        default: 0.2
+      random_state:
+        type: int
+        default: 42
+    command: >
+      python modelling.py
+      --dataset_path {dataset_path}
+      --max_features {max_features}
+      --ngram_range {ngram_range}
+      --C {C}
+      --test_size {test_size}
+      --random_state {random_state}
