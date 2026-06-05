@@ -9,7 +9,6 @@ import numpy as np
 import argparse
 import mlflow
 import mlflow.sklearn
-import dagshub
 import json
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -52,11 +51,15 @@ def main():
     # Parse ngram_range
     ngram = tuple(int(x) for x in args.ngram_range.split(','))
 
-# Init DagsHub
+    # Init MLflow ke DagsHub
     print("Menginisialisasi DagsHub...")
     import os
-    os.environ['DAGSHUB_USER_TOKEN'] = os.getenv('DAGSHUB_TOKEN', '')
-    dagshub.init(repo_owner=DAGSHUB_OWNER, repo_name=DAGSHUB_REPO, mlflow=True)
+    token = os.getenv('DAGSHUB_TOKEN', '')
+    mlflow.set_tracking_uri(
+        f"https://dagshub.com/{DAGSHUB_OWNER}/{DAGSHUB_REPO}.mlflow"
+    )
+    os.environ['MLFLOW_TRACKING_USERNAME'] = DAGSHUB_OWNER
+    os.environ['MLFLOW_TRACKING_PASSWORD'] = token
     mlflow.set_experiment(EXPERIMENT_NAME)
 
     # Load data
