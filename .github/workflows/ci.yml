@@ -35,29 +35,30 @@ jobs:
       - name: Train Model with MLflow Run
         env:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+          MLFLOW_TRACKING_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
+          MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
-          cd MLProject
-          python modelling.py \
-            --dataset_path smsa_preprocessing/smsa_preprocessed.csv \
-            --max_features 5000 \
-            --ngram_range 1,2 \
-            --C 1.0 \
-            --test_size 0.2 \
-            --random_state 42
+          mlflow run MLProject \
+            --env-manager=local \
+            -P dataset_path=smsa_preprocessing/smsa_preprocessed.csv \
+            -P max_features=5000 \
+            -P ngram_range=1,2 \
+            -P C=1.0 \
+            -P test_size=0.2 \
+            -P random_state=42
 
       - name: Upload Artifacts to GitHub
         uses: actions/upload-artifact@v4
         with:
           name: model-artifacts-${{ github.run_number }}
           path: |
-            MLProject/confusion_matrix.png
-            MLProject/classification_report.json
+            confusion_matrix.png
+            classification_report.json
           retention-days: 30
 
       - name: Build Docker Image
         run: |
           cd MLProject
-          pip install mlflow==2.19.0
           mlflow models build-docker \
             --model-uri "runs:/$(python -c "import mlflow; mlflow.set_tracking_uri('https://dagshub.com/melindasevira7-bit/Eksperimen_SML_Melinda-Sevira.mlflow'); runs = mlflow.search_runs(experiment_names=['Workflow_CI_Klasifikasi_Sentimen'], order_by=['start_time DESC'], max_results=1); print(runs.iloc[0]['run_id'])")/model" \
             --name "melindasevira7bit/klasifikasi-sentimen" \
