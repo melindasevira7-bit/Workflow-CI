@@ -12,6 +12,7 @@ import mlflow.sklearn
 import json
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -32,7 +33,6 @@ nltk.download('stopwords', quiet=True)
 # ─── Konfigurasi DagsHub ──────────────────────────────────────────────────────
 DAGSHUB_OWNER   = 'melindasevira7-bit'
 DAGSHUB_REPO    = 'Eksperimen_SML_Melinda-Sevira'
-EXPERIMENT_NAME = 'Workflow_CI_Klasifikasi_Sentimen'
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -53,14 +53,12 @@ def main():
 
     # Init MLflow ke DagsHub
     print("Menginisialisasi DagsHub...")
-    import os
     token = os.getenv('DAGSHUB_TOKEN', '')
     mlflow.set_tracking_uri(
         f"https://dagshub.com/{DAGSHUB_OWNER}/{DAGSHUB_REPO}.mlflow"
     )
     os.environ['MLFLOW_TRACKING_USERNAME'] = DAGSHUB_OWNER
     os.environ['MLFLOW_TRACKING_PASSWORD'] = token
-    with mlflow.start_run():
 
     # Load data
     print(f"Memuat dataset dari: {args.dataset_path}")
@@ -91,7 +89,7 @@ def main():
         ))
     ])
 
-    with mlflow.start_run(nested=True):
+    with mlflow.start_run():
         # Train
         pipeline.fit(X_train, y_train)
         y_pred = pipeline.predict(X_test)
