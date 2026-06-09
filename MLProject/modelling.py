@@ -89,7 +89,8 @@ def main():
         ))
     ])
 
-    with mlflow.start_run():
+    import time
+with mlflow.start_run(run_name=f"run_{int(time.time())}"):
         # Train
         pipeline.fit(X_train, y_train)
         y_pred = pipeline.predict(X_test)
