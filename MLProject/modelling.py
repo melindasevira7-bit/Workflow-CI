@@ -4,6 +4,8 @@ modelling.py - MLflow Project Entry Point
 Script pelatihan model untuk MLflow Project.
 """
 
+import os
+import time
 import pandas as pd
 import numpy as np
 import argparse
@@ -12,7 +14,6 @@ import mlflow.sklearn
 import json
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -31,8 +32,8 @@ nltk.download('punkt_tab', quiet=True)
 nltk.download('stopwords', quiet=True)
 
 # ─── Konfigurasi DagsHub ──────────────────────────────────────────────────────
-DAGSHUB_OWNER   = 'melindasevira7-bit'
-DAGSHUB_REPO    = 'Eksperimen_SML_Melinda-Sevira'
+DAGSHUB_OWNER = 'melindasevira7-bit'
+DAGSHUB_REPO  = 'Eksperimen_SML_Melinda-Sevira'
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -89,8 +90,7 @@ def main():
         ))
     ])
 
-    import time
-with mlflow.start_run(run_name=f"run_{int(time.time())}"):
+    with mlflow.start_run(run_name=f"run_{int(time.time())}"):
         # Train
         pipeline.fit(X_train, y_train)
         y_pred = pipeline.predict(X_test)
