@@ -60,7 +60,7 @@ def main():
     )
     os.environ['MLFLOW_TRACKING_USERNAME'] = DAGSHUB_OWNER
     os.environ['MLFLOW_TRACKING_PASSWORD'] = token
-    mlflow.set_experiment(EXPERIMENT_NAME)
+    with mlflow.start_run():
 
     # Load data
     print(f"Memuat dataset dari: {args.dataset_path}")
