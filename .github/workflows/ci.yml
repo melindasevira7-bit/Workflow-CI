@@ -47,7 +47,7 @@ jobs:
         run: |
           mlflow run MLProject \
             --env-manager=local \
-            -P dataset_path=MLProject/smsa_preprocessing/smsa_preprocessed.csv \
+            -P dataset_path=smsa_preprocessing/smsa_preprocessed.csv \
             -P max_features=5000 \
             -P ngram_range=1,2 \
             -P C=1.0 \
