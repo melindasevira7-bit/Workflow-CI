@@ -108,7 +108,7 @@ def main():
 
         # Log params
         mlflow.log_param("max_features", args.max_features)
-        mlflow.log_param("ngram_range",  str(ngram))
+        mlflow.log_param("ngram_range_param",  str(ngram))
         mlflow.log_param("C",            args.C)
         mlflow.log_param("test_size",    args.test_size)
         mlflow.log_param("random_state", args.random_state)
